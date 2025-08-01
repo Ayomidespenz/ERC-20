@@ -3,18 +3,20 @@
 
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
-const JAN_1ST_2030 = 1893456000;
-const ONE_GWEI: bigint = 1_000_000_000n;
+const TOKEN_NAME = "My ERC20 Token";
+const TOKEN_SYMBOL = "MET";
+const TOKEN_DECIMALS = 18;
+const TOTAL_SUPPLY = 1_000_000_000n; // 1 billion tokens
 
-const LockModule = buildModule("LockModule", (m) => {
-  const unlockTime = m.getParameter("unlockTime", JAN_1ST_2030);
-  const lockedAmount = m.getParameter("lockedAmount", ONE_GWEI);
+const BasicERC20Module = buildModule("BasicERC20Module", (m) => {
+  const tokenName = m.getParameter("tokenName", TOKEN_NAME);
+  const tokenSymbol = m.getParameter("tokenSymbol", TOKEN_SYMBOL);
+  const tokenDecimals = m.getParameter("tokenDecimals", TOKEN_DECIMALS);
+  const totalSupply = m.getParameter("totalSupply", TOTAL_SUPPLY);
 
-  const lock = m.contract("Lock", [unlockTime], {
-    value: lockedAmount,
-  });
+  const token = m.contract("BasicERC20", [tokenName, tokenSymbol, tokenDecimals, totalSupply]);
 
-  return { lock };
+  return { token };
 });
 
-export default LockModule;
+export default BasicERC20Module;
